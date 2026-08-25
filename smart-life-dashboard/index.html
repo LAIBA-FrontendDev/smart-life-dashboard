@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Life SaaS Dashboard</title>
+    <!-- Modern Typography & Icons -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation (Desktop) / Bottom Nav (Mobile) -->
+        <aside class="sidebar">
+            <div class="logo">
+                <i class="fa-solid fa-bolt icon-accent"></i>
+                <span>SmartLife</span>
+            </div>
+            <nav class="nav-menu">
+                <button class="nav-item active" data-target="dashboard-view"><i class="fa-solid fa-chart-pie"></i> <span>Dashboard</span></button>
+                <button class="nav-item" data-target="todo-view"><i class="fa-solid fa-list-check"></i> <span>To-Do</span></button>
+                <button class="nav-item" data-target="expense-view"><i class="fa-solid fa-wallet"></i> <span>Expenses</span></button>
+                <button class="nav-item" data-target="habits-view"><i class="fa-solid fa-star"></i> <span>Goals & Habits</span></button>
+                <button class="nav-item" data-target="timer-view"><i class="fa-solid fa-clock"></i> <span>Focus Timer</span></button>
+                <button class="nav-item" data-target="notes-view"><i class="fa-solid fa-note-sticky"></i> <span>Notes</span></button>
+                <button class="nav-item" data-target="settings-view"><i class="fa-solid fa-gear"></i> <span>Settings</span></button>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Global Top Header -->
+            <header class="top-header">
+                <div class="welcome-text">
+                    <h1 id="greeting-msg">Good Day!</h1>
+                    <p id="current-date-time">Loading system date & time...</p>
+                </div>
+                <div class="header-actions">
+                    <button id="noti-toggle-btn" class="icon-btn" title="Toggle Notifications"><i class="fa-solid fa-bell"></i></button>
+                    <button id="theme-toggle-btn" class="icon-btn" title="Toggle Dark/Light Mode"><i class="fa-solid fa-moon"></i></button>
+                </div>
+            </header>
+
+            <!-- Dynamic Views Sections -->
+            <div class="view-container">
+                
+                <!-- 1. MAIN DASHBOARD VIEW -->
+                <section id="dashboard-view" class="view-section active">
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-info"><h3>Productivity</h3><p class="stat-value" id="stat-productivity">0%</p></div>
+                            <i class="fa-solid fa-chart-line stat-icon text-blue"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info"><h3>Today's Tasks</h3><p class="stat-value" id="stat-tasks">0/0</p></div>
+                            <i class="fa-solid fa-check-double stat-icon text-purple"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info"><h3>Monthly Balance</h3><p class="stat-value" id="stat-expenses">$0.00</p></div>
+                            <i class="fa-solid fa-money-bill-wave stat-icon text-green"></i>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-info"><h3>Habit Streak</h3><p class="stat-value" id="stat-streak">0 Days 🔥</p></div>
+                            <i class="fa-solid fa-fire stat-icon text-orange"></i>
+                        </div>
+                    </div>
+                    <div class="dashboard-grid">
+                        <div class="card chart-card">
+                            <h3><i class="fa-solid fa-chart-bar"></i> Productivity Tracker (Canvas)</h3>
+                            <canvas id="productivityChart" width="400" height="220"></canvas>
+                        </div>
+                        <div class="card chart-card">
+                            <h3><i class="fa-solid fa-chart-pie"></i> Expense Category Breakdown</h3>
+                            <canvas id="expenseChart" width="400" height="220"></canvas>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. TO-DO MANAGER VIEW -->
+                <section id="todo-view" class="view-section">
+                    <div class="card module-card">
+                        <h2><i class="fa-solid fa-list-check icon-accent"></i> To-Do Task Manager</h2>
+                        <form id="todo-form" class="input-inline-form">
+                            <input type="text" id="todo-input" placeholder="What needs to be done?" required>
+                            <select id="todo-priority">
+                                <option value="Low">Low Priority</option>
+                                <option value="Medium" selected>Medium Priority</option>
+                                <option value="High">High Priority</option>
+                            </select>
+                            <input type="date" id="todo-date" required>
+                            <button type="submit" class="btn-primary">Add Task</button>
+                        </form>
+                        <div class="filter-bar">
+                            <input type="text" id="todo-search" placeholder="Search tasks by name...">
+                            <select id="todo-filter">
+                                <option value="all">Show All Tasks</option>
+                                <option value="pending">Pending Only</option>
+                                <option value="completed">Completed Only</option>
+                            </select>
+                        </div>
+                        <ul id="todo-list" class="list-container"></ul>
+                    </div>
+                </section>
+
+                <!-- 3. EXPENSE TRACKER VIEW -->
+                <section id="expense-view" class="view-section">
+                    <div class="card module-card">
+                        <h2><i class="fa-solid fa-wallet icon-accent"></i> Expense & Budget Tracker</h2>
+                        <div class="budget-setup-row">
+                            <label for="budget-input">Set Monthly Budget Amount ($):</label>
+                            <input type="number" id="budget-input" value="1000">
+                        </div>
+                        <form id="expense-form" class="input-inline-form">
+                            <input type="text" id="exp-title" placeholder="Expense description..." required>
+                            <input type="number" id="exp-amount" placeholder="Amount ($)" required>
+                            <select id="exp-category">
+                                <option value="Food">Food</option>
+                                <option value="Transport">Transport</option>
+                                <option value="Bills">Bills</option>
+                                <option value="Shopping">Shopping</option>
+                                <option value="Education">Education</option>
+                                <option value="Other">Other</option>
+                            </select>
+                            <input type="date" id="exp-date" required>
+                            <button type="submit" class="btn-primary">Log Expense</button>
+                        </form>
+                        <div class="budget-summary-box">
+                            <p>Total Expenses: <span id="total-spent-val" class="text-orange">$0.00</span> | Remaining Wallet Budget: <span id="remaining-budget-val" class="text-green">$0.00</span></p>
+                        </div>
+                        <ul id="expense-list" class="list-container"></ul>
+                    </div>
+                </section>
+
+                <!-- 4. GOALS & HABITS VIEW -->
+                <section id="habits-view" class="view-section">
+                    <div class="dashboard-grid">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-bullseye icon-accent"></i> Long Term Goals</h3>
+                            <form id="goal-form" class="input-inline-form mt-2">
+                                <input type="text" id="goal-title" placeholder="Target goal title..." required>
+                                <input type="number" id="goal-target" placeholder="Target Unit" required style="width:100px;">
+                                <button type="submit" class="btn-primary">Create</button>
+                            </form>
+                            <ul id="goals-list" class="list-container mt-3"></ul>
+                        </div>
+                        <div class="card">
+                            <h3><i class="fa-solid fa-repeat icon-accent"></i> Daily Habits Tracker</h3>
+                            <form id="habit-form" class="input-inline-form mt-2">
+                                <input type="text" id="habit-title" placeholder="New habit to form..." required>
+                                <button type="submit" class="btn-primary">Track Habit</button>
+                            </form>
+                            <ul id="habits-list" class="list-container mt-3"></ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. FOCUS POMODORO TIMER VIEW -->
+                <section id="timer-view" class="view-section">
+                    <div class="card timer-card text-center">
+                        <h2><i class="fa-solid fa-clock icon-accent"></i> Pomodoro Focus Timer</h2>
+                        <div class="timer-display" id="timer-display">25:00</div>
+                        <div class="timer-status-text" id="timer-status">Get Ready to Focus</div>
+                        <div class="timer-controls">
+                            <button id="timer-start" class="btn-primary"><i class="fa-solid fa-play"></i> Start</button>
+                            <button id="timer-pause" class="btn-secondary"><i class="fa-solid fa-pause"></i> Pause</button>
+                            <button id="timer-reset" class="btn-danger"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+                        </div>
+                        <p class="completed-sessions-log">Sessions Completed Today: <span id="completed-sessions" class="text-purple">0</span></p>
+                    </div>
+                </section>
+
+                <!-- 6. NOTES SYSTEM VIEW -->
+                <section id="notes-view" class="view-section">
+                    <div class="card module-card">
+                        <h2><i class="fa-solid fa-note-sticky icon-accent"></i> Quick Workspace Notes</h2>
+                        <form id="note-form" class="input-inline-form">
+                            <input type="text" id="note-title" placeholder="Note heading..." required>
+                            <input type="text" id="note-content" placeholder="Write comprehensive note details here..." required style="flex:2;">
+                            <button type="submit" class="btn-primary">Save Notes</button>
+                        </form>
+                        <div class="filter-bar"><input type="text" id="note-search" placeholder="Search through saved notes..."></div>
+                        <div id="notes-grid" class="notes-grid-layout mt-3"></div>
+                    </div>
+                </section>
+                <!-- 7. SETTINGS VIEW -->
+                <section id="settings-view" class="view-section">
+                    <div class="card module-card">
+                        <h2><i class="fa-solid fa-gear icon-accent"></i> Core Settings Console</h2>
+                        <div class="settings-list">
+                            <div class="setting-row">
+                                <div><strong>System Push Notifications</strong><p class="sub-text">Receive instant popups for tasks & timer status</p></div>
+                                <button id="opt-noti" class="btn-secondary">Disable</button>
+                            </div>
+                            <div class="setting-row">
+                                <div><strong>Export Data Backup</strong><p class="sub-text">Download all dashboard records into a single JSON file</p></div>
+                                <button id="opt-export" class="btn-primary"><i class="fa-solid fa-download"></i> Download JSON</button>
+                            </div>
+                            <div class="setting-row">
+                                <div><strong>Import Data Backup</strong><p class="sub-text">Restore all data modules from an existing JSON backup</p></div>
+                                <input type="file" id="opt-import" accept=".json">
+                            </div>
+                            <div class="setting-row">
+                                <div><strong>Master Factory Reset</strong><p class="sub-text" style="color:#ef4444;">Permanently delete all LocalStorage sync entries</p></div>
+                                <button id="opt-clear" class="btn-danger">Clear All System Data</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Script linked to your folder's exact file script.js -->
+    <script src="script.js"></script>
+</body>
+</html>
