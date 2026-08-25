@@ -1,4 +1,4 @@
-// --- CENTRAL APPLICATION STATE ---
+
 let state = {
     theme: 'dark',
     notifications: true,
@@ -11,7 +11,7 @@ let state = {
     pomodoro: { sessions: 0 }
 };
 
-// --- DATA ENGINE PERSISTENCE ---
+
 function loadState() {
     const localData = localStorage.getItem('smart_life_state_v2');
     if (localData) {
@@ -30,7 +30,7 @@ function saveState() {
     updateDashboardUI();
 }
 
-// --- APP CORE ORCHESTRATION ---
+
 document.addEventListener("DOMContentLoaded", () => {
     loadState();
     initApplicationView();
@@ -56,7 +56,7 @@ function initApplicationView() {
     refreshNotesGrid();
 }
 
-// --- LIVE CLOCK MODULE ---
+
 function renderLiveDateTime() {
     const timeNode = document.getElementById('current-date-time');
     const msgNode = document.getElementById('greeting-msg');
@@ -73,7 +73,7 @@ function renderLiveDateTime() {
     else msgNode.innerText = "Good Evening!";
 }
 
-// --- VIEWS NAV & ATTACHMENTS ---
+
 function bindActionEventListeners() {
     document.querySelectorAll('.nav-item').forEach(btn => {
         btn.addEventListener('click', (e) => {
@@ -89,7 +89,7 @@ function bindActionEventListeners() {
         });
     });
 
-    // Global Top Bar Switches
+   
     document.getElementById('theme-toggle-btn').addEventListener('click', () => {
         state.theme = state.theme === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', state.theme);
@@ -105,7 +105,7 @@ function bindActionEventListeners() {
         alert(`Notifications mode state active status is: ${state.notifications ? 'ON' : 'OFF'}`);
     });
 
-    // Form Event Attachment Links
+
     document.getElementById('todo-form').addEventListener('submit', handleTaskSubmission);
     document.getElementById('todo-filter').addEventListener('change', refreshTasksList);
     document.getElementById('todo-search').addEventListener('input', refreshTasksList);
@@ -116,7 +116,7 @@ function bindActionEventListeners() {
     document.getElementById('note-form').addEventListener('submit', handleNoteSubmission);
     document.getElementById('note-search').addEventListener('input', refreshNotesGrid);
 
-    // Operational Settings Triggers
+
     document.getElementById('opt-noti').addEventListener('click', (e) => {
         state.notifications = !state.notifications;
         e.target.innerText = state.notifications ? "Disable" : "Enable";
@@ -135,13 +135,13 @@ function bindActionEventListeners() {
     initializePomodoroTimerLogic();
 }
 
-// --- SYSTEM REMINDER ENGINE ---
+
 function pushSystemNotification(title, message) {
     if (state.notifications && Notification.permission === "granted") {
         new Notification(title, { body: message });
     }
 }
-// --- TO DO OPERATIONS ---
+
 function handleTaskSubmission(e) {
     e.preventDefault();
     const taskItem = {
@@ -158,7 +158,7 @@ function handleTaskSubmission(e) {
     pushSystemNotification("Task Assigned", `"${taskItem.title}" has been successfully added to records.`);
 }
 
-// --- TASKS SYNC MANAGER ---
+
 function refreshTasksList() {
     const filterOption = document.getElementById('todo-filter').value;
     const query = document.getElementById('todo-search').value.toLowerCase();
@@ -187,7 +187,7 @@ function refreshTasksList() {
 window.commitToggleTask = (id) => { state.tasks.forEach(t => { if(t.id === id) t.completed = !t.completed; }); saveState(); refreshTasksList(); };
 window.commitDeleteTask = (id) => { state.tasks = state.tasks.filter(t => t.id !== id); saveState(); refreshTasksList(); };
 
-// --- EXPENSE MANAGEMENT METRICS ---
+
 function handleExpenseSubmission(e) {
     e.preventDefault();
     const expenseItem = {
@@ -230,7 +230,7 @@ function refreshExpensesList() {
 }
 window.commitDeleteExpense = (id) => { state.expenses = state.expenses.filter(e => e.id !== id); saveState(); refreshExpensesList(); };
 
-// --- GOALS AND HABIT SYSTEMS ---
+
 function handleGoalSubmission(e) {
     e.preventDefault();
     state.goals.push({
@@ -293,7 +293,7 @@ window.commitToggleHabit = (id) => {
     saveState(); refreshHabitsList(); 
 };
 window.commitDeleteHabit = (id) => { state.habits = state.habits.filter(h => h.id !== id); saveState(); refreshHabitsList(); };
-// --- POMODORO AUTOMATION LOOP ---
+
 let runtimeIntervalRef = null, remainingSessionSeconds = 1500, timerExecutionActive = false, workingSessionMode = 'Focus';
 function initializePomodoroTimerLogic() {
     const viewDisplay = document.getElementById('timer-display');
@@ -348,7 +348,7 @@ function initializePomodoroTimerLogic() {
     });
 }
 
-// --- NOTES MANAGER INFRASTRUCTURE ---
+
 function handleNoteSubmission(e) {
     e.preventDefault();
     state.notes.push({
@@ -379,7 +379,7 @@ function refreshNotesGrid() {
 window.commitToggleNotePin = (id) => { state.notes.forEach(n => { if(n.id === id) n.pinned = !n.pinned; }); saveState(); refreshNotesGrid(); };
 window.commitDeleteNote = (id) => { state.notes = state.notes.filter(n => n.id !== id); saveState(); refreshNotesGrid(); };
 
-// --- METRIC AGGREGATION HANDLERS ---
+
 function updateDashboardUI() {
     const finishedCount = state.tasks.filter(t => t.completed).length;
     const universalCount = state.tasks.length;
@@ -396,13 +396,13 @@ function updateDashboardUI() {
     document.getElementById('completed-sessions').innerText = state.pomodoro.sessions || 0;
 }
 
-// --- PURE CANVAS ANALYTICS ENGINES ---
+
 function renderCanvasAnalytics() {
     const canvas1 = document.getElementById('productivityChart');
     const canvas2 = document.getElementById('expenseChart');
     if(!canvas1 || !canvas2) return;
 
-    // 1. Productivity Canvas Rendering (Bar Chart)
+   
     const ctx1 = canvas1.getContext('2d');
     ctx1.clearRect(0, 0, 400, 220);
     ctx1.fillStyle = state.theme === 'dark' ? '#1e293b' : '#f1f5f9';
@@ -421,7 +421,7 @@ function renderCanvasAnalytics() {
     ctx1.fillText(`Completed (${doneVal})`, 55, 185);
     ctx1.fillText(`Pending (${activeVal})`, 240, 185);
 
-    // 2. Expense Category Analytics Rendering (Pie Chart)
+   
     const ctx2 = canvas2.getContext('2d');
     ctx2.clearRect(0, 0, 400, 220);
     ctx2.fillStyle = state.theme === 'dark' ? '#1e293b' : '#f1f5f9';
@@ -451,7 +451,7 @@ function renderCanvasAnalytics() {
     });
 }
 
-// --- ADMINISTRATIVE DATA SYSTEM DATA IO ---
+
 function downloadStateBackupFile() {
     const cleanOutputBlob = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
     const structuralAnchorElement = document.createElement('a');
